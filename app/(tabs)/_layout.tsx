@@ -1,43 +1,88 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from "expo-router";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useRouter } from "expo-router";
+import { ActivityIndicator, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+export default function MainLayout() {
+  const { token, isLoading } = useContext(AuthContext);
+  const router = useRouter();
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  useEffect(() => {
+    if (!isLoading && !token) {
+      router.replace("/auth/LoginScreen");
+    }
+  }, [token, isLoading]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (!token) {
+    return null;
+  }
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
+    <Tabs>
       <Tabs.Screen
-        name="index"
+        name="home"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: "Home",
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+          tabBarStyle: {
+            backgroundColor: "#161622",
+          },
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="friendsList"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: "My Friends",
+          headerTitleStyle: {
+            fontSize: 24,
+            fontWeight: "bold",
+          },
+          //headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="people" size={size} color={color} />
+          ),
+          tabBarStyle: {
+            backgroundColor: "#161622",
+          },
+          headerRight: () => (
+            <Ionicons
+              name="add"
+              size={24}
+              color="black"
+              style={{ marginRight: 16 }}
+              onPress={() => router.push("/friendRequests")}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Groups"
+        options={{
+          title: "Groups",
+          headerShown: false,
+          headerTitleStyle: {
+            fontSize: 24,
+            fontWeight: "bold",
+          },
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="chatbubbles" size={size} color={color} />
+          ),
+          tabBarStyle: {
+            backgroundColor: "#161622",
+          },
         }}
       />
     </Tabs>
