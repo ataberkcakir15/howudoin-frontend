@@ -22,13 +22,7 @@ export default function FriendRequestsLayout() {
           title: "Friend Requests",
           headerShown: false,
           headerRight: () => (
-            <Pressable
-              onPress={() => {
-                // Örnek: başka bir sayfaya gitmek
-                // router.push("/someOtherScreen");
-              }}
-              style={{ marginRight: 16 }}
-            >
+            <Pressable onPress={() => {}} style={{ marginRight: 16 }}>
               <Ionicons name="help-circle-outline" size={24} color="black" />
             </Pressable>
           ),

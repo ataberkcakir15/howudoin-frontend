@@ -1,4 +1,3 @@
-// app/main/chat/_messaging.tsx
 import React, { useState, useEffect, useContext } from "react";
 import {
   View,

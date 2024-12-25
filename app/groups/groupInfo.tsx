@@ -30,7 +30,7 @@ export default function GroupInfoScreen() {
   const fetchGroupMembers = async (grpId: string) => {
     try {
       setError("");
-      const data = await getGroupMembers(token!, grpId); // Backend'den grup üyelerini çek
+      const data = await getGroupMembers(token!, grpId);
       setMembers(data);
     } catch (err: any) {
       setError(err.message || "Error fetching group members");
